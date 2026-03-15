@@ -40,7 +40,7 @@ class AboutSection extends StatelessWidget {
                       height: 300,
                       width: 400,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
+                      errorBuilder: (_, _, _) => Container(
                         height: 300,
                         color: AppColors.primary.withValues(alpha: 0.1),
                         child: const Icon(Icons.image, size: 64, color: AppColors.primary),

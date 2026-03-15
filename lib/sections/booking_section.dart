@@ -86,7 +86,7 @@ class _BookingSectionState extends State<BookingSection> {
         headers: const {'Content-Type': 'application/json'},
         body: body,
       );
-      if (!context.mounted) return;
+      if (!mounted) return;
       if (response.statusCode >= 200 && response.statusCode < 300) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -99,7 +99,7 @@ class _BookingSectionState extends State<BookingSection> {
         _showErrorDialog('No se pudo enviar. Revisa el token y el chat_id.');
       }
     } catch (_) {
-      if (context.mounted) {
+      if (mounted) {
         _showErrorDialog('Sin conexión a internet. Intenta de nuevo.');
       }
     } finally {

@@ -134,7 +134,7 @@ class _GalleryImageState extends State<_GalleryImage> {
                     height: widget.extent,
                     cacheWidth: 600,
                     cacheHeight: 600,
-                    errorBuilder: (_, __, ___) => Container(
+                    errorBuilder: (_, _, _) => Container(
                       color: AppColors.primary.withValues(alpha: 0.1),
                       child: const Icon(Icons.image, color: AppColors.primary),
                     ),
@@ -145,11 +145,7 @@ class _GalleryImageState extends State<_GalleryImage> {
                     child: Container(
                       color: AppColors.primary.withValues(alpha: 0.2),
                       child: const Center(
-                        child: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                          size: 40,
-                        ),
+                        child: Icon(Icons.favorite, color: Colors.white, size: 40),
                       ),
                     ),
                   ),

@@ -202,7 +202,7 @@ class _BookingDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       hint: Text('Tipo de Evento', style: AppTextStyles.body),
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.celebration, size: 20, color: Colors.grey.shade600),

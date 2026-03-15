@@ -27,7 +27,7 @@ class HeroSection extends StatelessWidget {
           Image.asset(
             _heroImagePath,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(color: AppColors.backgroundLight),
+            errorBuilder: (_, _, _) => Container(color: AppColors.backgroundLight),
           ),
           DecoratedBox(
             decoration: BoxDecoration(

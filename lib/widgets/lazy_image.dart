@@ -79,7 +79,7 @@ class _LazyImageState extends State<LazyImage> {
       cacheWidth: widget.cacheWidth,
       cacheHeight: widget.cacheHeight,
       errorBuilder: widget.errorBuilder ??
-          (_, __, ___) => Container(
+          (_, _, _) => Container(
                 width: widget.width,
                 height: widget.height,
                 color: AppColors.primary.withValues(alpha: 0.1),
