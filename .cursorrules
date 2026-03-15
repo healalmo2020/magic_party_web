@@ -1,0 +1,59 @@
+# Cursor Rules – Flutter Web Project: Magic Party
+
+## 🎯 Objetivo General
+Construir una landing page responsiva, elegante y moderna para un negocio de decoración de fiestas, priorizando la mantenibilidad y el rendimiento en web.
+
+---
+
+## 🏗 ESTRUCTURA DEL PROYECTO (Estricta)
+Sigue esta jerarquía para mantener el orden de archivos:
+- `lib/core/`: `colors.dart`, `text_styles.dart`, `theme.dart`.
+- `lib/pages/`: `landing_page.dart`.
+- `lib/sections/`: Un archivo por sección (ej. `hero_section.dart`).
+- `lib/widgets/`: Componentes atómicos reutilizables (ej. `custom_button.dart`).
+- `assets/images/`: Todos los recursos visuales.
+
+---
+
+## 🎨 SISTEMA DE DISEÑO (Design System)
+
+### Colores (AppColors)
+- **Primary Pink:** `#FF4FA3` (Botones y resaltados).
+- **Soft Pink:** `#FFD1E6` / **Light Pink:** `#FFF0F6`.
+- **Gold Accent:** `#D4AF37`.
+- **Background Light:** `#F8F8F8`.
+
+### Tipografía (Google Fonts)
+- **Headings:** 'Playfair Display' (Elegante/Serif).
+- **Body:** 'Poppins' (Limpio/Sans-serif).
+- *Regla:* No uses estilos de texto inline. Define todo en `AppTextStyles`.
+
+---
+
+## 🛠 REGLAS DE DESARROLLO (Modo Agente)
+
+### Widgets y Código
+1. **Atomicidad:** Cada sección debe ser un `StatelessWidget` independiente.
+2. **Const:** Usa `const` en todos los constructores posibles para optimizar el renderizado web.
+3. **Simplicidad:** Evita el "Widget Hell" (anidación profunda). Si un widget tiene más de 3 niveles de anidación, extrae sub-widgets.
+4. **Imports:** Prioriza imports relativos o consistentes.
+
+### Responsividad (Web-First)
+1. **Breakpoints:** Usa un ancho estándar de 1200px para escritorio.
+2. **Adaptabilidad:** Usa `LayoutBuilder` o `MediaQuery` para ajustar paddings y tamaños de fuente en pantallas móviles (< 800px).
+3. **Flexibilidad:** Prefiere `Wrap`, `Flexible` y `Spacer` sobre anchos fijos (`width: 500`).
+
+---
+
+## 🚀 FLUJO DE TRABAJO (Modo Plan)
+
+1. **Validación:** Antes de crear una sección, el modelo debe confirmar que usará los colores de `AppColors`.
+2. **Imágenes:** Si se requiere una imagen, usa un placeholder descriptivo si el archivo no existe en `assets/images/`.
+3. **Navegación:** La `LandingPage` debe usar un `SingleChildScrollView` para ensamblar las secciones.
+
+---
+
+## ⚠️ PROHIBICIONES
+- NO usar librerías de gestión de estado complejas (como Bloc/Riverpod) a menos que se solicite; mantén el estado local si es posible.
+- NO usar `MaterialApp` con temas por defecto; usa siempre los estilos personalizados.
+- NO crear archivos de más de 200 líneas de código.
