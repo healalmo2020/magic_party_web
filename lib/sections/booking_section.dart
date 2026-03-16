@@ -1,13 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../core/colors.dart';
+import '../controllers/booking_form_controller.dart';
+import '../services/telegram_booking_service.dart';
 import '../widgets/booking_form_card.dart';
 
 /// Token del bot de Telegram (obtener con @BotFather).
 const String _telegramBotToken = '8415332181:AAGGDX3Ieey9Nx-mxlc-OCaSj7Dibhw7vjk';
+
 /// ID del chat donde recibir las reservas (ej: -1001234567890 o tu user id).
 const String _telegramChatId = '5169254921';
 
@@ -26,6 +26,7 @@ class _BookingSectionState extends State<BookingSection> {
   final _dateController = TextEditingController();
   String _selectedEventType = 'Birthday';
   bool _isSending = false;
+  late final TelegramBookingService _bookingService;
 
   @override
   void dispose() {
@@ -34,6 +35,15 @@ class _BookingSectionState extends State<BookingSection> {
     _emailController.dispose();
     _dateController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _bookingService = TelegramBookingService(
+      botToken: _telegramBotToken,
+      chatId: _telegramChatId,
+    );
   }
 
   Future<void> _selectDate() async {
@@ -48,46 +58,23 @@ class _BookingSectionState extends State<BookingSection> {
     }
   }
 
-  static String _escapeHtml(String text) {
-    return text
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;');
-  }
-
   Future<void> _sendToTelegram() async {
-    final name = _escapeHtml(_nameController.text.trim());
-    final phone = _escapeHtml(_phoneController.text.trim());
-    final email = _escapeHtml(_emailController.text.trim());
-    final date = _escapeHtml(_dateController.text.trim());
-    final event = _escapeHtml(_selectedEventType);
-
-    final message = '✨ <b>NUEVA RESERVA - MAGIC PARTY</b> ✨\n\n'
-        '👤 <b>Cliente:</b> $name\n'
-        '📱 <b>Teléfono:</b> ${phone.isEmpty ? "—" : phone}\n'
-        '📧 <b>Email:</b> ${email.isEmpty ? "—" : email}\n'
-        '📅 <b>Fecha:</b> $date\n'
-        '🎈 <b>Evento:</b> $event\n\n'
-        '<i>Hola, vi su página y quiero cotizar esta decoración.</i>';
-
-    final uri = Uri.parse(
-      'https://api.telegram.org/bot$_telegramBotToken/sendMessage',
-    );
-
     setState(() => _isSending = true);
-    try {
-      final body = jsonEncode({
-        'chat_id': _telegramChatId,
-        'text': message,
-        'parse_mode': 'HTML',
-      });
-      final response = await http.post(
-        uri,
-        headers: const {'Content-Type': 'application/json'},
-        body: body,
-      );
-      if (!mounted) return;
-      if (response.statusCode >= 200 && response.statusCode < 300) {
+    final result = await _bookingService.sendBooking(
+      BookingFormController.buildRequest(
+        name: _nameController.text,
+        phone: _phoneController.text,
+        email: _emailController.text,
+        date: _dateController.text,
+        eventType: _selectedEventType,
+      ),
+    );
+    if (!mounted) return;
+
+    setState(() => _isSending = false);
+
+    switch (result) {
+      case BookingSendResult.success:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('¡Reserva enviada! Nos contactaremos pronto.'),
@@ -95,15 +82,13 @@ class _BookingSectionState extends State<BookingSection> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-      } else {
+        break;
+      case BookingSendResult.invalidConfiguration:
         _showErrorDialog('No se pudo enviar. Revisa el token y el chat_id.');
-      }
-    } catch (_) {
-      if (mounted) {
+        break;
+      case BookingSendResult.networkError:
         _showErrorDialog('Sin conexión a internet. Intenta de nuevo.');
-      }
-    } finally {
-      if (mounted) setState(() => _isSending = false);
+        break;
     }
   }
 
@@ -148,6 +133,12 @@ class _BookingSectionState extends State<BookingSection> {
             emailController: _emailController,
             dateController: _dateController,
             selectedEventType: _selectedEventType,
+            eventTypes: BookingFormController.eventTypes,
+            nameValidator: BookingFormController.validateName,
+            phoneValidator: BookingFormController.validatePhone,
+            emailValidator: BookingFormController.validateEmail,
+            dateValidator: BookingFormController.validateDate,
+            eventTypeValidator: BookingFormController.validateEventType,
             onEventTypeChanged: (v) => setState(() => _selectedEventType = v ?? 'Birthday'),
             onSelectDate: _selectDate,
             isSending: _isSending,

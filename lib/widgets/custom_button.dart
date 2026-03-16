@@ -3,21 +3,25 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../core/colors.dart';
 
+/// Botón primario reutilizable. Opcionalmente [semanticsLabel] para accesibilidad.
 class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.icon,
+    this.semanticsLabel,
   });
 
   final String text;
   final VoidCallback onPressed;
   final IconData? icon;
+  /// Etiqueta para lectores de pantalla. Si es null se usa [text].
+  final String? semanticsLabel;
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    final button = ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
@@ -41,6 +45,12 @@ class CustomButton extends StatelessWidget {
               ],
             )
           : Text(text),
+    );
+    final label = semanticsLabel ?? text;
+    return Semantics(
+      label: label,
+      button: true,
+      child: button,
     );
   }
 }

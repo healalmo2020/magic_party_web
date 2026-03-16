@@ -67,6 +67,7 @@ class ContactSection extends StatelessWidget {
           CustomButton(
             text: 'BOOK YOUR EVENT NOW',
             onPressed: onBookPressed ?? () {},
+            semanticsLabel: 'Ir a reservar evento',
           ),
         ],
       ),
@@ -107,28 +108,37 @@ class _ContactLinkState extends State<_ContactLink> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: _handleTap,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              widget.icon,
-              size: 32,
-              color: _hovered ? AppColors.primary : Colors.white,
-            ),
-            const SizedBox(width: 12),
-            Text(
-              widget.label,
-              style: AppTextStyles.display.copyWith(
+    final isLink = widget.url != null;
+    final semanticLabel = isLink
+        ? 'Abrir enlace ${widget.label}'
+        : 'Contactar: ${widget.label}';
+    return Semantics(
+      label: semanticLabel,
+      button: true,
+      link: isLink,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: GestureDetector(
+          onTap: _handleTap,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                widget.icon,
+                size: 32,
                 color: _hovered ? AppColors.primary : Colors.white,
-                fontWeight: FontWeight.w700,
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              Text(
+                widget.label,
+                style: AppTextStyles.display.copyWith(
+                  color: _hovered ? AppColors.primary : Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

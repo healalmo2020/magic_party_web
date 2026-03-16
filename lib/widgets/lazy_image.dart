@@ -7,6 +7,9 @@ import '../core/colors.dart';
 const double _kVisibilityThreshold = 0.05;
 
 /// Imagen que solo se carga cuando entra en el viewport (lazy loading).
+///
+/// Usa detección por viewport ([VisibilityDetector]), no caché de red.
+/// Para imágenes remotas (URLs) considerar un paquete como cached_network_image.
 class LazyImage extends StatefulWidget {
   const LazyImage({
     super.key,

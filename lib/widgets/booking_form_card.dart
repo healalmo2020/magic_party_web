@@ -5,14 +5,10 @@ import '../core/text_styles.dart';
 import 'section_header.dart';
 import 'custom_button.dart';
 
-const List<String> _eventTypes = [
-  'Birthday',
-  'Baby Shower',
-  'Wedding',
-  'Other',
-];
-
-/// Tarjeta del formulario de reserva con campos y estilos unificados.
+/// Tarjeta del formulario de reserva: solo presentación.
+///
+/// La validación y la lógica de envío vienen del controlador;
+/// este widget solo muestra campos y delega validadores y onSubmit.
 class BookingFormCard extends StatelessWidget {
   const BookingFormCard({
     super.key,
@@ -22,6 +18,12 @@ class BookingFormCard extends StatelessWidget {
     required this.emailController,
     required this.dateController,
     required this.selectedEventType,
+    required this.eventTypes,
+    required this.nameValidator,
+    required this.phoneValidator,
+    required this.emailValidator,
+    required this.dateValidator,
+    required this.eventTypeValidator,
     required this.onEventTypeChanged,
     required this.onSelectDate,
     required this.isSending,
@@ -34,6 +36,12 @@ class BookingFormCard extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController dateController;
   final String selectedEventType;
+  final List<String> eventTypes;
+  final String? Function(String?) nameValidator;
+  final String? Function(String?) phoneValidator;
+  final String? Function(String?) emailValidator;
+  final String? Function(String?) dateValidator;
+  final String? Function(String?) eventTypeValidator;
   final ValueChanged<String?> onEventTypeChanged;
   final VoidCallback onSelectDate;
   final bool isSending;
@@ -66,8 +74,7 @@ class BookingFormCard extends StatelessWidget {
                 controller: nameController,
                 icon: Icons.person,
                 hint: 'Nombre Completo',
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Ingresa tu nombre' : null,
+                validator: nameValidator,
               ),
               const SizedBox(height: 16),
               _BookingTextField(
@@ -75,8 +82,7 @@ class BookingFormCard extends StatelessWidget {
                 icon: Icons.phone,
                 hint: 'Número de Teléfono',
                 keyboardType: TextInputType.phone,
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Ingresa tu teléfono' : null,
+                validator: phoneValidator,
               ),
               const SizedBox(height: 16),
               _BookingTextField(
@@ -84,23 +90,20 @@ class BookingFormCard extends StatelessWidget {
                 icon: Icons.email,
                 hint: 'Correo Electrónico (opcional)',
                 keyboardType: TextInputType.emailAddress,
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty) return null;
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v)) {
-                    return 'Correo no válido';
-                  }
-                  return null;
-                },
+                validator: emailValidator,
               ),
               const SizedBox(height: 16),
               _BookingDateField(
                 controller: dateController,
                 onTap: onSelectDate,
+                validator: dateValidator,
               ),
               const SizedBox(height: 16),
               _BookingDropdown(
                 value: selectedEventType,
+                items: eventTypes,
                 onChanged: onEventTypeChanged,
+                validator: eventTypeValidator,
               ),
               const SizedBox(height: 28),
               SizedBox(
@@ -112,6 +115,7 @@ class BookingFormCard extends StatelessWidget {
                     : CustomButton(
                         text: 'RESERVAR AHORA',
                         onPressed: onSubmit,
+                        semanticsLabel: 'Enviar solicitud de reserva',
                       ),
               ),
             ],
@@ -162,10 +166,12 @@ class _BookingDateField extends StatelessWidget {
   const _BookingDateField({
     required this.controller,
     required this.onTap,
+    required this.validator,
   });
 
   final TextEditingController controller;
   final VoidCallback onTap;
+  final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
@@ -173,8 +179,7 @@ class _BookingDateField extends StatelessWidget {
       controller: controller,
       readOnly: true,
       onTap: onTap,
-      validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Selecciona la fecha del evento' : null,
+      validator: validator,
       decoration: InputDecoration(
         hintText: 'Fecha del Evento',
         prefixIcon: Icon(Icons.calendar_today, size: 20, color: Colors.grey.shade600),
@@ -193,16 +198,20 @@ class _BookingDateField extends StatelessWidget {
 class _BookingDropdown extends StatelessWidget {
   const _BookingDropdown({
     required this.value,
+    required this.items,
     required this.onChanged,
+    required this.validator,
   });
 
   final String value;
+  final List<String> items;
   final ValueChanged<String?> onChanged;
+  final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      initialValue: value,
+      initialValue: value.isNotEmpty ? value : null,
       hint: Text('Tipo de Evento', style: AppTextStyles.body),
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.celebration, size: 20, color: Colors.grey.shade600),
@@ -214,11 +223,11 @@ class _BookingDropdown extends StatelessWidget {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
-      items: _eventTypes
+      items: items
           .map((e) => DropdownMenuItem(value: e, child: Text(e)))
           .toList(),
       onChanged: onChanged,
-      validator: (v) => v == null ? 'Selecciona el tipo de evento' : null,
+      validator: validator,
     );
   }
 }

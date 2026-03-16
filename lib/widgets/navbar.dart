@@ -57,9 +57,13 @@ class Navbar extends StatelessWidget {
                 _BookNowButton(compact: true, onPressed: onBookPressed),
               ] else ...[
                 const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
+                Semantics(
+                  label: 'Abrir menú de navegación',
+                  button: true,
+                  child: IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
                 ),
               ],
             ],
@@ -70,9 +74,12 @@ class Navbar extends StatelessWidget {
   }
 
   Widget _buildLogo(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FullScreenImageViewer.show(context, _logoPath),
-      child: MouseRegion(
+    return Semantics(
+      label: 'Ver logo en pantalla completa',
+      button: true,
+      child: GestureDetector(
+        onTap: () => FullScreenImageViewer.show(context, _logoPath),
+        child: MouseRegion(
         cursor: SystemMouseCursors.zoomIn,
         child: Image.asset(
           _logoPath,
@@ -89,6 +96,7 @@ class Navbar extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }
@@ -129,17 +137,24 @@ class _NavLinkState extends State<_NavLink> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: () => widget.onNavigate?.call(widget.item.id),
-        child: Text(
-          widget.item.label,
-          style: AppTextStyles.label.copyWith(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: _hovered ? AppColors.primary : null,
+    final sectionLabel = widget.item.label == 'Home'
+        ? 'Ir a inicio'
+        : 'Ir a ${widget.item.label.toLowerCase()}';
+    return Semantics(
+      label: sectionLabel,
+      button: true,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _hovered = true),
+        onExit: (_) => setState(() => _hovered = false),
+        child: GestureDetector(
+          onTap: () => widget.onNavigate?.call(widget.item.id),
+          child: Text(
+            widget.item.label,
+            style: AppTextStyles.label.copyWith(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: _hovered ? AppColors.primary : null,
+            ),
           ),
         ),
       ),
@@ -156,23 +171,31 @@ class _BookNowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (compact) {
-      return ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          shape: const StadiumBorder(),
-          elevation: 4,
-          shadowColor: AppColors.primary.withValues(alpha:0.2),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          textStyle: GoogleFonts.plusJakartaSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
+      return Semantics(
+        label: 'Ir a reservar evento',
+        button: true,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            shape: const StadiumBorder(),
+            elevation: 4,
+            shadowColor: AppColors.primary.withValues(alpha:0.2),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            textStyle: GoogleFonts.plusJakartaSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
           ),
+          child: const Text('Book Now'),
         ),
-        child: const Text('Book Now'),
       );
     }
-    return CustomButton(text: 'Book Now', onPressed: onPressed ?? () {});
+    return CustomButton(
+      text: 'Book Now',
+      onPressed: onPressed ?? () {},
+      semanticsLabel: 'Ir a reservar evento',
+    );
   }
 }

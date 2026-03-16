@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'core/colors.dart';
+import 'core/theme.dart';
 import 'pages/landing_page.dart';
 
 void main() {
   runApp(const MagicPartyApp());
 }
 
+/// Punto de entrada de la app. El tema y la ruta inicial están centralizados aquí
+/// ([core/theme.dart], [LandingPage]).
 class MagicPartyApp extends StatelessWidget {
   const MagicPartyApp({super.key});
 
@@ -16,10 +17,7 @@ class MagicPartyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Magic Party',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-        textTheme: GoogleFonts.poppinsTextTheme(),
-      ),
+      theme: AppTheme.light,
       home: const LandingPage(),
     );
   }

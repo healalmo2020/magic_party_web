@@ -21,26 +21,27 @@ class NavDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ListTile(
+            Semantics(label: 'Ir a inicio', button: true, child: ListTile(
               title: const Text('Home'),
               onTap: () => _navigateAndClose(context, ''),
-            ),
-            ListTile(
+            )),
+            Semantics(label: 'Ir a servicios', button: true, child: ListTile(
               title: const Text('Services'),
               onTap: () => _navigateAndClose(context, 'services'),
-            ),
-            ListTile(
+            )),
+            Semantics(label: 'Ir a galería', button: true, child: ListTile(
               title: const Text('Gallery'),
               onTap: () => _navigateAndClose(context, 'gallery'),
-            ),
-            ListTile(
+            )),
+            Semantics(label: 'Ir a contacto', button: true, child: ListTile(
               title: const Text('Contact'),
               onTap: () => _navigateAndClose(context, 'contact'),
-            ),
+            )),
             const Spacer(),
             CustomButton(
               text: 'Book Now',
               onPressed: () => _navigateAndClose(context, 'booking'),
+              semanticsLabel: 'Ir a reservar evento',
             ),
           ],
         ),
