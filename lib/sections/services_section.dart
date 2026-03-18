@@ -10,6 +10,7 @@ const List<({IconData icon, String title, String description})> _services = [
   (icon: Icons.cake, title: 'Birthdays', description: 'Fun and festive party setups for all ages.'),
   (icon: Icons.business, title: 'Corporate Events', description: 'Professional decor for business celebrations.'),
   (icon: Icons.restaurant, title: 'Catering Services', description: 'Delicious menus and gourmet displays for every occasion.'),
+  (icon: Icons.delivery_dining, title: 'Delivery & Setup', description: 'Professional delivery and on-site assembly for a stress-free experience.'),
   (icon: Icons.auto_awesome, title: 'Custom Themes', description: 'Tailored designs for your unique vision.'),
 ];
 

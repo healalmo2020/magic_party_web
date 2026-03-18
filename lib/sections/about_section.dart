@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import '../core/colors.dart';
 import '../core/text_styles.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/full_screen_image.dart';
 import '../widgets/section_header.dart';
+
+const String _aboutImagePath = 'assets/images/about_picture.webp';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key, this.onBookPressed});
@@ -26,6 +29,8 @@ class AboutSection extends StatelessWidget {
           const SectionHeader(title: 'About Magic Party'),
           const SizedBox(height: 32),
           if (isMobile) ...[
+            _AboutImageBlock(maxWidth: width - horizontalPadding * 2),
+            const SizedBox(height: 24),
             _AboutContent(onBookPressed: onBookPressed),
           ] else
             Row(
@@ -33,19 +38,9 @@ class AboutSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.asset(
-                      'assets/images/balloon_event_setup.webp',
-                      height: 300,
-                      width: 400,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Container(
-                        height: 300,
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        child: const Icon(Icons.image, size: 64, color: AppColors.primary),
-                      ),
-                    ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: _AboutImageBlock(maxWidth: 400),
                   ),
                 ),
                 const SizedBox(width: 48),
@@ -56,6 +51,52 @@ class AboutSection extends StatelessWidget {
               ],
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// Imagen About con proporción natural ([BoxFit.contain]); tap abre lightbox como la galería.
+class _AboutImageBlock extends StatelessWidget {
+  const _AboutImageBlock({required this.maxWidth});
+
+  final double maxWidth;
+  static const double _maxHeight = 400;
+
+  @override
+  Widget build(BuildContext context) {
+    final w = maxWidth.clamp(0.0, 400.0);
+    return Semantics(
+      label: 'Ver imagen About en pantalla grande',
+      button: true,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.zoomIn,
+        child: GestureDetector(
+          onTap: () => FullScreenImageViewer.show(context, _aboutImagePath),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              width: w,
+              height: _maxHeight,
+              color: AppColors.backgroundLight,
+              alignment: Alignment.center,
+              child: Image.asset(
+                _aboutImagePath,
+                width: w,
+                height: _maxHeight,
+                fit: BoxFit.contain,
+                cacheWidth: 1200,
+                cacheHeight: 1200,
+                errorBuilder: (_, _, _) => Container(
+                  width: w,
+                  height: _maxHeight,
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  child: const Icon(Icons.image, size: 64, color: AppColors.primary),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

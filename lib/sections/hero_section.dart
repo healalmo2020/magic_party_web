@@ -36,7 +36,7 @@ class HeroSection extends StatelessWidget {
                 end: Alignment.topCenter,
                 colors: [
                   AppColors.backgroundLight,
-                  AppColors.backgroundLight.withValues(alpha: 0.6),
+                  AppColors.backgroundLight.withValues(alpha: 0.1),
                   Colors.transparent,
                 ],
               ),
