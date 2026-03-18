@@ -33,6 +33,10 @@ class NavDrawer extends StatelessWidget {
               title: const Text('Gallery'),
               onTap: () => _navigateAndClose(context, 'gallery'),
             )),
+            Semantics(label: 'Ir a paquetes', button: true, child: ListTile(
+              title: const Text('Packages'),
+              onTap: () => _navigateAndClose(context, 'packages'),
+            )),
             Semantics(label: 'Ir a contacto', button: true, child: ListTile(
               title: const Text('Contact'),
               onTap: () => _navigateAndClose(context, 'contact'),

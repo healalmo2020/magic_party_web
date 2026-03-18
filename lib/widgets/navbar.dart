@@ -14,6 +14,7 @@ const List<({String label, String id})> _navItems = [
   (label: 'Home', id: ''),
   (label: 'Services', id: 'services'),
   (label: 'Gallery', id: 'gallery'),
+  (label: 'Packages', id: 'packages'),
   (label: 'Contact', id: 'contact'),
 ];
 

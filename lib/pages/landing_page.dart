@@ -11,6 +11,7 @@ import '../sections/booking_section.dart' deferred as booking_section;
 import '../sections/contact_section.dart' deferred as contact_section;
 import '../sections/gallery_section.dart' deferred as gallery_section;
 import '../sections/services_section.dart' deferred as services_section;
+import '../sections/packages_section.dart' deferred as packages_section;
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -23,6 +24,7 @@ class _LandingPageState extends State<LandingPage> {
   final _heroKey = GlobalKey();
   final _servicesKey = GlobalKey();
   final _galleryKey = GlobalKey();
+  final _packagesKey = GlobalKey();
   final _bookingKey = GlobalKey();
   final _contactKey = GlobalKey();
 
@@ -38,6 +40,7 @@ class _LandingPageState extends State<LandingPage> {
     await Future.wait([
       services_section.loadLibrary(),
       gallery_section.loadLibrary(),
+      packages_section.loadLibrary(),
       about_section.loadLibrary(),
       booking_section.loadLibrary(),
       contact_section.loadLibrary(),
@@ -49,6 +52,7 @@ class _LandingPageState extends State<LandingPage> {
       '' => _heroKey,
       'services' => _servicesKey,
       'gallery' => _galleryKey,
+      'packages' => _packagesKey,
       'booking' => _bookingKey,
       'contact' => _contactKey,
       _ => null,
@@ -78,6 +82,7 @@ class _LandingPageState extends State<LandingPage> {
                     if (loaded) ...[
                       KeyedSubtree(key: _servicesKey, child: services_section.ServicesSection()),
                       KeyedSubtree(key: _galleryKey, child: gallery_section.GallerySection()),
+                      KeyedSubtree(key: _packagesKey, child: packages_section.PackagesSection()),
                       about_section.AboutSection(onBookPressed: () => _scrollToSection('booking')),
                       KeyedSubtree(key: _bookingKey, child: booking_section.BookingSection()),
                       KeyedSubtree(
@@ -87,7 +92,7 @@ class _LandingPageState extends State<LandingPage> {
                     ] else ...[
                       KeyedSubtree(key: _servicesKey, child: const _SectionPlaceholder()),
                       KeyedSubtree(key: _galleryKey, child: const _SectionPlaceholder()),
-                      const _SectionPlaceholder(),
+                      KeyedSubtree(key: _packagesKey, child: const _SectionPlaceholder()),
                       KeyedSubtree(key: _bookingKey, child: const _SectionPlaceholder()),
                       KeyedSubtree(key: _contactKey, child: const _SectionPlaceholder()),
                     ],

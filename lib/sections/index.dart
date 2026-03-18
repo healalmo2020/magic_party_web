@@ -3,4 +3,5 @@ export 'booking_section.dart';
 export 'contact_section.dart';
 export 'gallery_section.dart';
 export 'services_section.dart';
+export 'packages_section.dart';
 export 'hero_section.dart';
