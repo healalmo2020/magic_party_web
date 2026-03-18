@@ -16,12 +16,14 @@ class BookingFormCard extends StatelessWidget {
     required this.nameController,
     required this.phoneController,
     required this.emailController,
+    required this.locationController,
     required this.dateController,
     required this.selectedEventType,
     required this.eventTypes,
     required this.nameValidator,
     required this.phoneValidator,
     required this.emailValidator,
+    required this.locationValidator,
     required this.dateValidator,
     required this.eventTypeValidator,
     required this.onEventTypeChanged,
@@ -34,12 +36,14 @@ class BookingFormCard extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
+  final TextEditingController locationController;
   final TextEditingController dateController;
   final String selectedEventType;
   final List<String> eventTypes;
   final String? Function(String?) nameValidator;
   final String? Function(String?) phoneValidator;
   final String? Function(String?) emailValidator;
+  final String? Function(String?) locationValidator;
   final String? Function(String?) dateValidator;
   final String? Function(String?) eventTypeValidator;
   final ValueChanged<String?> onEventTypeChanged;
@@ -73,14 +77,14 @@ class BookingFormCard extends StatelessWidget {
               _BookingTextField(
                 controller: nameController,
                 icon: Icons.person,
-                hint: 'Nombre Completo',
+                hint: 'Full name',
                 validator: nameValidator,
               ),
               const SizedBox(height: 16),
               _BookingTextField(
                 controller: phoneController,
                 icon: Icons.phone,
-                hint: 'Número de Teléfono',
+                hint: 'Phone number',
                 keyboardType: TextInputType.phone,
                 validator: phoneValidator,
               ),
@@ -88,9 +92,17 @@ class BookingFormCard extends StatelessWidget {
               _BookingTextField(
                 controller: emailController,
                 icon: Icons.email,
-                hint: 'Correo Electrónico (opcional)',
+                hint: 'Email (optional)',
                 keyboardType: TextInputType.emailAddress,
                 validator: emailValidator,
+              ),
+              const SizedBox(height: 16),
+              _BookingTextField(
+                controller: locationController,
+                icon: Icons.location_on,
+                hint: 'City or ZIP code',
+                keyboardType: TextInputType.streetAddress,
+                validator: locationValidator,
               ),
               const SizedBox(height: 16),
               _BookingDateField(
@@ -113,9 +125,9 @@ class BookingFormCard extends StatelessWidget {
                         child: CircularProgressIndicator(color: AppColors.primary),
                       )
                     : CustomButton(
-                        text: 'RESERVAR AHORA',
+                        text: 'BOOK NOW',
                         onPressed: onSubmit,
-                        semanticsLabel: 'Enviar solicitud de reserva',
+                        semanticsLabel: 'Submit booking request',
                       ),
               ),
             ],
@@ -181,7 +193,7 @@ class _BookingDateField extends StatelessWidget {
       onTap: onTap,
       validator: validator,
       decoration: InputDecoration(
-        hintText: 'Fecha del Evento',
+        hintText: 'Event date',
         prefixIcon: Icon(Icons.calendar_today, size: 20, color: Colors.grey.shade600),
         filled: true,
         fillColor: Colors.grey.shade100,
@@ -212,7 +224,7 @@ class _BookingDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       initialValue: value.isNotEmpty ? value : null,
-      hint: Text('Tipo de Evento', style: AppTextStyles.body),
+      hint: Text('Event type', style: AppTextStyles.body),
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.celebration, size: 20, color: Colors.grey.shade600),
         filled: true,

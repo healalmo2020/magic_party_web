@@ -18,7 +18,7 @@ class BookingFormController {
   /// Valida el nombre. Devuelve mensaje de error o null si es válido.
   static String? validateName(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Ingresa tu nombre';
+      return 'Please enter your name';
     }
     return null;
   }
@@ -26,7 +26,7 @@ class BookingFormController {
   /// Valida el teléfono.
   static String? validatePhone(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Ingresa tu teléfono';
+      return 'Please enter your phone number';
     }
     return null;
   }
@@ -35,7 +35,15 @@ class BookingFormController {
   static String? validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) return null;
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Correo no válido';
+      return 'Invalid email address';
+    }
+    return null;
+  }
+
+  /// Ciudad o código postal (obligatorio).
+  static String? validateCityOrZip(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Please enter city or ZIP code';
     }
     return null;
   }
@@ -43,7 +51,7 @@ class BookingFormController {
   /// Valida la fecha del evento.
   static String? validateDate(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Selecciona la fecha del evento';
+      return 'Please select the event date';
     }
     return null;
   }
@@ -51,7 +59,7 @@ class BookingFormController {
   /// Valida el tipo de evento.
   static String? validateEventType(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Selecciona el tipo de evento';
+      return 'Please select an event type';
     }
     return null;
   }
@@ -61,6 +69,7 @@ class BookingFormController {
     required String name,
     required String phone,
     required String email,
+    required String cityOrZip,
     required String date,
     required String eventType,
   }) {
@@ -68,6 +77,7 @@ class BookingFormController {
       name: name,
       phone: phone,
       email: email,
+      cityOrZip: cityOrZip,
       date: date,
       eventType: eventType,
     );

@@ -5,15 +5,15 @@ void main() {
   group('BookingFormController', () {
     group('validateName', () {
       test('returns error when null', () {
-        expect(BookingFormController.validateName(null), 'Ingresa tu nombre');
+        expect(BookingFormController.validateName(null), 'Please enter your name');
       });
 
       test('returns error when empty', () {
-        expect(BookingFormController.validateName(''), 'Ingresa tu nombre');
+        expect(BookingFormController.validateName(''), 'Please enter your name');
       });
 
       test('returns error when only whitespace', () {
-        expect(BookingFormController.validateName('   '), 'Ingresa tu nombre');
+        expect(BookingFormController.validateName('   '), 'Please enter your name');
       });
 
       test('returns null when non-empty', () {
@@ -23,11 +23,11 @@ void main() {
 
     group('validatePhone', () {
       test('returns error when null', () {
-        expect(BookingFormController.validatePhone(null), 'Ingresa tu teléfono');
+        expect(BookingFormController.validatePhone(null), 'Please enter your phone number');
       });
 
       test('returns error when empty', () {
-        expect(BookingFormController.validatePhone(''), 'Ingresa tu teléfono');
+        expect(BookingFormController.validatePhone(''), 'Please enter your phone number');
       });
 
       test('returns null when non-empty', () {
@@ -43,9 +43,9 @@ void main() {
       });
 
       test('returns error for invalid format', () {
-        expect(BookingFormController.validateEmail('invalid'), 'Correo no válido');
-        expect(BookingFormController.validateEmail('a@'), 'Correo no válido');
-        expect(BookingFormController.validateEmail('@b.com'), 'Correo no válido');
+        expect(BookingFormController.validateEmail('invalid'), 'Invalid email address');
+        expect(BookingFormController.validateEmail('a@'), 'Invalid email address');
+        expect(BookingFormController.validateEmail('@b.com'), 'Invalid email address');
       });
 
       test('returns null for valid format', () {
@@ -54,11 +54,24 @@ void main() {
       });
     });
 
+    group('validateCityOrZip', () {
+      test('returns error when null or empty', () {
+        expect(BookingFormController.validateCityOrZip(null), 'Please enter city or ZIP code');
+        expect(BookingFormController.validateCityOrZip(''), 'Please enter city or ZIP code');
+        expect(BookingFormController.validateCityOrZip('   '), 'Please enter city or ZIP code');
+      });
+
+      test('returns null when has value', () {
+        expect(BookingFormController.validateCityOrZip('Newark'), isNull);
+        expect(BookingFormController.validateCityOrZip('07001'), isNull);
+      });
+    });
+
     group('validateDate', () {
       test('returns error when null or empty', () {
-        expect(BookingFormController.validateDate(null), 'Selecciona la fecha del evento');
-        expect(BookingFormController.validateDate(''), 'Selecciona la fecha del evento');
-        expect(BookingFormController.validateDate('   '), 'Selecciona la fecha del evento');
+        expect(BookingFormController.validateDate(null), 'Please select the event date');
+        expect(BookingFormController.validateDate(''), 'Please select the event date');
+        expect(BookingFormController.validateDate('   '), 'Please select the event date');
       });
 
       test('returns null when has value', () {
@@ -68,8 +81,8 @@ void main() {
 
     group('validateEventType', () {
       test('returns error when null or empty', () {
-        expect(BookingFormController.validateEventType(null), 'Selecciona el tipo de evento');
-        expect(BookingFormController.validateEventType(''), 'Selecciona el tipo de evento');
+        expect(BookingFormController.validateEventType(null), 'Please select an event type');
+        expect(BookingFormController.validateEventType(''), 'Please select an event type');
       });
 
       test('returns null when has value', () {
@@ -83,12 +96,14 @@ void main() {
           name: 'Ana',
           phone: '5550000',
           email: 'ana@test.com',
+          cityOrZip: 'Newark 07102',
           date: '20/4/2025',
           eventType: 'Baby Shower',
         );
         expect(request.name, 'Ana');
         expect(request.phone, '5550000');
         expect(request.email, 'ana@test.com');
+        expect(request.cityOrZip, 'Newark 07102');
         expect(request.date, '20/4/2025');
         expect(request.eventType, 'Baby Shower');
       });

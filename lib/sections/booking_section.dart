@@ -23,6 +23,7 @@ class _BookingSectionState extends State<BookingSection> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
+  final _locationController = TextEditingController();
   final _dateController = TextEditingController();
   String _selectedEventType = 'Birthday';
   bool _isSending = false;
@@ -33,6 +34,7 @@ class _BookingSectionState extends State<BookingSection> {
     _nameController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
+    _locationController.dispose();
     _dateController.dispose();
     super.dispose();
   }
@@ -65,6 +67,7 @@ class _BookingSectionState extends State<BookingSection> {
         name: _nameController.text,
         phone: _phoneController.text,
         email: _emailController.text,
+        cityOrZip: _locationController.text,
         date: _dateController.text,
         eventType: _selectedEventType,
       ),
@@ -77,17 +80,17 @@ class _BookingSectionState extends State<BookingSection> {
       case BookingSendResult.success:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('¡Reserva enviada! Nos contactaremos pronto.'),
+            content: Text('Booking sent! We will contact you soon.'),
             backgroundColor: AppColors.primary,
             behavior: SnackBarBehavior.floating,
           ),
         );
         break;
       case BookingSendResult.invalidConfiguration:
-        _showErrorDialog('No se pudo enviar. Revisa el token y el chat_id.');
+        _showErrorDialog('Could not send. Check the bot token and chat ID.');
         break;
       case BookingSendResult.networkError:
-        _showErrorDialog('Sin conexión a internet. Intenta de nuevo.');
+        _showErrorDialog('No internet connection. Please try again.');
         break;
     }
   }
@@ -101,7 +104,7 @@ class _BookingSectionState extends State<BookingSection> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Entendido'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -131,12 +134,14 @@ class _BookingSectionState extends State<BookingSection> {
             nameController: _nameController,
             phoneController: _phoneController,
             emailController: _emailController,
+            locationController: _locationController,
             dateController: _dateController,
             selectedEventType: _selectedEventType,
             eventTypes: BookingFormController.eventTypes,
             nameValidator: BookingFormController.validateName,
             phoneValidator: BookingFormController.validatePhone,
             emailValidator: BookingFormController.validateEmail,
+            locationValidator: BookingFormController.validateCityOrZip,
             dateValidator: BookingFormController.validateDate,
             eventTypeValidator: BookingFormController.validateEventType,
             onEventTypeChanged: (v) => setState(() => _selectedEventType = v ?? 'Birthday'),

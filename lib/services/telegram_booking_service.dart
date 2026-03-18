@@ -8,6 +8,7 @@ class BookingRequest {
     required this.name,
     required this.phone,
     required this.email,
+    required this.cityOrZip,
     required this.date,
     required this.eventType,
   });
@@ -15,6 +16,7 @@ class BookingRequest {
   final String name;
   final String phone;
   final String email;
+  final String cityOrZip;
   final String date;
   final String eventType;
 }
@@ -55,15 +57,17 @@ class TelegramBookingService {
     final escapedPhone = _escapeHtml(request.phone.trim());
     final escapedEmail = _escapeHtml(request.email.trim());
     final escapedDate = _escapeHtml(request.date.trim());
+    final escapedCityZip = _escapeHtml(request.cityOrZip.trim());
     final escapedEvent = _escapeHtml(request.eventType.trim());
 
-    final message = '✨ <b>NUEVA RESERVA - MAGIC PARTY</b> ✨\n\n'
-        '👤 <b>Cliente:</b> $escapedName\n'
-        '📱 <b>Teléfono:</b> ${escapedPhone.isEmpty ? "—" : escapedPhone}\n'
+    final message = '✨ <b>NEW BOOKING - MAGIC PARTY</b> ✨\n\n'
+        '👤 <b>Client:</b> $escapedName\n'
+        '📱 <b>Phone:</b> ${escapedPhone.isEmpty ? "—" : escapedPhone}\n'
         '📧 <b>Email:</b> ${escapedEmail.isEmpty ? "—" : escapedEmail}\n'
-        '📅 <b>Fecha:</b> $escapedDate\n'
-        '🎈 <b>Evento:</b> $escapedEvent\n\n'
-        '<i>Hola, vi su página y quiero cotizar esta decoración.</i>';
+        '📍 <b>City / ZIP:</b> ${escapedCityZip.isEmpty ? "—" : escapedCityZip}\n'
+        '📅 <b>Date:</b> $escapedDate\n'
+        '🎈 <b>Event:</b> $escapedEvent\n\n'
+        '<i>Hi, I found you on your website and would like a quote for this decor.</i>';
 
     final uri = Uri.parse(
       'https://api.telegram.org/bot$botToken/sendMessage',
