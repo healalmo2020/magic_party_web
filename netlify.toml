@@ -1,9 +1,9 @@
-# Ajusta el comando si tu imagen de build no incluye Flutter en PATH.
-# Sin --dart-define se usan los valores por defecto en lib/core/telegram_env.dart.
-# Para credenciales del cliente en Netlify: Site settings → Environment variables
-# y amplía el comando con:
-# --dart-define=TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN --dart-define=TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID
+# Site settings → Environment variables (Build / Deploy):
+#   TELEGRAM_BOT_TOKEN = token del bot (@BotFather)
+#   TELEGRAM_CHAT_ID   = id del chat o grupo donde recibir reservas
+# Son obligatorias en Netlify para que el build empaquete las credenciales del cliente.
+# Sitio en la raíz del dominio (ajusta --base-href si publicas bajo subruta).
 
 [build]
-  command = "flutter pub get && flutter build web --release"
+  command = "flutter pub get && flutter build web --release --base-href \"/\" --dart-define=TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN --dart-define=TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID"
   publish = "build/web"
