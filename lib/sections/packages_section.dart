@@ -8,19 +8,19 @@ const _packages = [
   (
     name: 'Bronze Package',
     price: '\$299',
-    imagePath: 'assets/images/bronze_package.webp',
+    imagePath: 'assets/images/package_images/bronze_image1.webp',
     highlight: false,
   ),
   (
     name: 'Silver Package',
     price: '\$399',
-    imagePath: 'assets/images/silver_package.webp',
+    imagePath: 'assets/images/package_images/silver_package.webp',
     highlight: false,
   ),
   (
     name: 'Gold Package',
     price: '\$580',
-    imagePath: 'assets/images/gold_package.webp',
+    imagePath: 'assets/images/package_images/gold_image1.webp',
     highlight: true,
   ),
 ];

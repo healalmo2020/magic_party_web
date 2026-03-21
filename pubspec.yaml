@@ -64,6 +64,8 @@ flutter:
 
   assets:
     - assets/images/
+    # Subcarpetas no se incluyen con la entrada anterior; hay que declararlas explícitamente.
+    - assets/images/package_images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

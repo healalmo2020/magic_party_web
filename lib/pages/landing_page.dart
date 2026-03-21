@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/colors.dart';
 import '../sections/hero_section.dart';
+import '../widgets/book_now_fab.dart';
 import '../widgets/nav_drawer.dart';
 import '../widgets/navbar.dart';
 
@@ -28,12 +29,54 @@ class _LandingPageState extends State<LandingPage> {
   final _bookingKey = GlobalKey();
   final _contactKey = GlobalKey();
 
+  late final ScrollController _scrollController;
   late final Future<void> _sectionsLoadFuture;
+
+  bool _showBookNowFab = false;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_syncBookNowFabVisibility);
     _sectionsLoadFuture = _loadDeferredSections();
+    _sectionsLoadFuture.then((_) {
+      if (!mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _syncBookNowFabVisibility());
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _syncBookNowFabVisibility());
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_syncBookNowFabVisibility);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _syncBookNowFabVisibility() {
+    if (!mounted) return;
+    if (!_scrollController.hasClients) return;
+
+    const scrollThreshold = 16.0;
+    final hasScrolled = _scrollController.offset > scrollThreshold;
+
+    final bookingContext = _bookingKey.currentContext;
+    var bookingIntersectsViewport = false;
+    if (bookingContext != null) {
+      final renderObject = bookingContext.findRenderObject();
+      if (renderObject is RenderBox && renderObject.hasSize) {
+        final topLeft = renderObject.localToGlobal(Offset.zero);
+        final bottom = topLeft.dy + renderObject.size.height;
+        final screenHeight = MediaQuery.sizeOf(context).height;
+        bookingIntersectsViewport = bottom > 0 && topLeft.dy < screenHeight;
+      }
+    }
+
+    final show = hasScrolled && !bookingIntersectsViewport;
+    if (show != _showBookNowFab) {
+      setState(() => _showBookNowFab = show);
+    }
   }
 
   Future<void> _loadDeferredSections() async {
@@ -66,9 +109,17 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavDrawer(onNavigate: _scrollToSection),
+      floatingActionButton: SafeArea(
+        child: BookNowFab(
+          visible: _showBookNowFab,
+          onPressed: () => _scrollToSection('booking'),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Stack(
         children: [
           SingleChildScrollView(
+            controller: _scrollController,
             child: FutureBuilder<void>(
               future: _sectionsLoadFuture,
               builder: (context, snapshot) {
