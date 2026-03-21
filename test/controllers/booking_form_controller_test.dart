@@ -51,6 +51,8 @@ void main() {
       test('returns null for valid format', () {
         expect(BookingFormController.validateEmail('a@b.co'), isNull);
         expect(BookingFormController.validateEmail('user@example.com'), isNull);
+        expect(BookingFormController.validateEmail('  user@example.com  '), isNull);
+        expect(BookingFormController.validateEmail('user+tag@sub.example.network'), isNull);
       });
     });
 

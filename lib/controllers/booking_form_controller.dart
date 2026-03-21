@@ -33,10 +33,12 @@ class BookingFormController {
 
   /// Valida el email (opcional). Si está vacío es válido; si tiene valor debe ser formato correcto.
   static String? validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) return null;
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Invalid email address';
-    }
+    final v = value?.trim() ?? '';
+    if (v.isEmpty) return null;
+    // Comparar contra el texto ya recortado (espacios al pegar ya no invalidan).
+    // TLD de 2+ caracteres (.com, .network, etc.).
+    final ok = RegExp(r'^[\w.%+-]+@[\w.-]+\.\w{2,}$').hasMatch(v);
+    if (!ok) return 'Invalid email address';
     return null;
   }
 

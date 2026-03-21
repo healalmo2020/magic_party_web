@@ -94,6 +94,8 @@ class BookingFormCard extends StatelessWidget {
                 icon: Icons.email,
                 hint: 'Email (optional)',
                 keyboardType: TextInputType.emailAddress,
+                autocorrect: false,
+                enableSuggestions: false,
                 validator: emailValidator,
               ),
               const SizedBox(height: 16),
@@ -144,6 +146,8 @@ class _BookingTextField extends StatelessWidget {
     required this.icon,
     required this.hint,
     this.keyboardType = TextInputType.text,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
     this.validator,
   });
 
@@ -151,6 +155,8 @@ class _BookingTextField extends StatelessWidget {
   final IconData icon;
   final String hint;
   final TextInputType keyboardType;
+  final bool autocorrect;
+  final bool enableSuggestions;
   final String? Function(String?)? validator;
 
   @override
@@ -158,6 +164,8 @@ class _BookingTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
+      autocorrect: autocorrect,
+      enableSuggestions: enableSuggestions,
       validator: validator,
       decoration: InputDecoration(
         hintText: hint,
