@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../core/colors.dart';
+import '../core/telegram_env.dart';
 import '../controllers/booking_form_controller.dart';
 import '../services/telegram_booking_service.dart';
 import '../widgets/booking_form_card.dart';
-
-/// Token del bot de Telegram (obtener con @BotFather).
-const String _telegramBotToken = '8415332181:AAGGDX3Ieey9Nx-mxlc-OCaSj7Dibhw7vjk';
-
-/// ID del chat donde recibir las reservas (ej: -1001234567890 o tu user id).
-const String _telegramChatId = '5169254921';
 
 class BookingSection extends StatefulWidget {
   const BookingSection({super.key});
@@ -43,8 +38,8 @@ class _BookingSectionState extends State<BookingSection> {
   void initState() {
     super.initState();
     _bookingService = TelegramBookingService(
-      botToken: _telegramBotToken,
-      chatId: _telegramChatId,
+      botToken: TelegramEnv.botToken,
+      chatId: TelegramEnv.chatId,
     );
   }
 

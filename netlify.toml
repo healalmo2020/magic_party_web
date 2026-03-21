@@ -1,0 +1,9 @@
+# Ajusta el comando si tu imagen de build no incluye Flutter en PATH.
+# Sin --dart-define se usan los valores por defecto en lib/core/telegram_env.dart.
+# Para credenciales del cliente en Netlify: Site settings → Environment variables
+# y amplía el comando con:
+# --dart-define=TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN --dart-define=TELEGRAM_CHAT_ID=$TELEGRAM_CHAT_ID
+
+[build]
+  command = "flutter pub get && flutter build web --release"
+  publish = "build/web"

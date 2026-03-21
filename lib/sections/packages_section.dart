@@ -2,25 +2,38 @@ import 'package:flutter/material.dart';
 
 import '../core/colors.dart';
 import '../core/text_styles.dart';
+import '../widgets/package_gallery_viewer.dart';
 import '../widgets/section_header.dart';
 
 const _packages = [
   (
     name: 'Bronze Package',
     price: '\$299',
-    imagePath: 'assets/images/package_images/bronze_image1.webp',
+    imagePaths: <String>[
+      'assets/images/package_images/bronze_image1.webp',
+      'assets/images/package_images/bronze_image2.webp',
+      'assets/images/package_images/bronze_image11.webp',
+    ],
     highlight: false,
   ),
   (
     name: 'Silver Package',
     price: '\$399',
-    imagePath: 'assets/images/package_images/silver_package.webp',
+    imagePaths: <String>[
+      'assets/images/package_images/silver_package.webp',
+      'assets/images/package_images/silver_image1.webp',
+      'assets/images/package_images/silver_image2.webp',
+    ],
     highlight: false,
   ),
   (
     name: 'Gold Package',
     price: '\$580',
-    imagePath: 'assets/images/package_images/gold_image1.webp',
+    imagePaths: <String>[
+      'assets/images/package_images/gold_image1.webp',
+      'assets/images/package_images/gold_image2.webp',
+      'assets/images/package_images/gold_image3.webp',
+    ],
     highlight: true,
   ),
 ];
@@ -54,7 +67,7 @@ class PackagesSection extends StatelessWidget {
                     child: _PackageCard(
                       name: p.name,
                       price: p.price,
-                      imagePath: p.imagePath,
+                      imagePaths: p.imagePaths,
                       highlight: p.highlight,
                     ),
                   ),
@@ -71,13 +84,13 @@ class _PackageCard extends StatefulWidget {
   const _PackageCard({
     required this.name,
     required this.price,
-    required this.imagePath,
+    required this.imagePaths,
     required this.highlight,
   });
 
   final String name;
   final String price;
-  final String imagePath;
+  final List<String> imagePaths;
   final bool highlight;
 
   @override
@@ -94,47 +107,49 @@ class _PackageCardState extends State<_PackageCard> {
         : AppColors.primaryPink.withValues(alpha: _hovered ? 0.4 : 0.1);
 
     return Semantics(
-      label: '${widget.name}, ${widget.price} package',
+      label: '${widget.name}, ${widget.price} package. Abre galería de fotos.',
       button: true,
       child: MouseRegion(
         onEnter: (_) => setState(() => _hovered = true),
         onExit: (_) => setState(() => _hovered = false),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: AppColors.backgroundLight,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: borderColor, width: widget.highlight ? 2 : 1),
-            boxShadow: _hovered
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 18,
-                      offset: const Offset(0, 8),
-                    ),
-                  ]
-                : const [],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  widget.imagePath,
-                  height: 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  cacheWidth: 1200,
-                  cacheHeight: 1200,
-                  errorBuilder: (_, _, _) => Container(
+        child: GestureDetector(
+          onTap: () => PackageGalleryViewer.show(context, imagePaths: widget.imagePaths),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.backgroundLight,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: borderColor, width: widget.highlight ? 2 : 1),
+              boxShadow: _hovered
+                  ? [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.08),
+                        blurRadius: 18,
+                        offset: const Offset(0, 8),
+                      ),
+                    ]
+                  : const [],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    widget.imagePaths.first,
                     height: 160,
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    child: const Icon(Icons.image, color: AppColors.primary),
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    cacheWidth: 1200,
+                    cacheHeight: 1200,
+                    errorBuilder: (_, _, _) => Container(
+                      height: 160,
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      child: const Icon(Icons.image, color: AppColors.primary),
+                    ),
                   ),
                 ),
-              ),
               const SizedBox(height: 16),
               Text(
                 widget.name,
@@ -156,6 +171,7 @@ class _PackageCardState extends State<_PackageCard> {
           ),
         ),
       ),
+    ),
     );
   }
 
