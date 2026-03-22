@@ -69,6 +69,14 @@ class ContactSection extends StatelessWidget {
             onPressed: onBookPressed ?? () {},
             semanticsLabel: 'Ir a reservar evento',
           ),
+          const SizedBox(height: 40),
+          Text(
+            '© 2026 Magic Party | Alvarado Dev Studio',
+            style: AppTextStyles.bodySmall.copyWith(
+              fontSize: 13,
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
+          ),
         ],
       ),
     );

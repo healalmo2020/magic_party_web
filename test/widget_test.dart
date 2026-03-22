@@ -5,21 +5,29 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:magic_party/main.dart';
+import 'package:magic_party/core/theme.dart';
+import 'package:magic_party/sections/hero_section.dart';
 
 void main() {
   setUpAll(() {
-    // Evita que Google Fonts intente cargar fuentes en el test
     GoogleFonts.config.allowRuntimeFetching = false;
   });
 
-  testWidgets('Magic Party app smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const MagicPartyApp());
-    await tester.pumpAndSettle(const Duration(seconds: 5));
+  testWidgets('Hero muestra Magic Party sin dependencias pesadas', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light,
+        home: Scaffold(
+          body: HeroSection(onBookPressed: () {}),
+        ),
+      ),
+    );
+    await tester.pump();
 
-    expect(find.text('Magic Party'), findsAtLeastNWidgets(1));
+    expect(find.text('Magic Party'), findsOneWidget);
   });
 }

@@ -27,7 +27,7 @@ class Navbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    final isMobile = width < 800;
+    final isMobile = width < 900;
 
     return ClipRect(
       child: BackdropFilter(

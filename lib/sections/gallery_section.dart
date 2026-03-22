@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../core/colors.dart';
-import '../widgets/full_screen_image.dart';
 import '../widgets/lazy_image.dart';
+import '../widgets/package_gallery_viewer.dart';
 import '../widgets/section_header.dart';
 
 const List<String> _galleryImages = [
@@ -75,6 +75,7 @@ class GallerySection extends StatelessWidget {
               itemBuilder: (context, index) => _GalleryImage(
                 path: _galleryImages[index],
                 extent: _getExtent(index),
+                imageIndex: index,
               ),
             ),
           ),
@@ -85,10 +86,15 @@ class GallerySection extends StatelessWidget {
 }
 
 class _GalleryImage extends StatefulWidget {
-  const _GalleryImage({required this.path, required this.extent});
+  const _GalleryImage({
+    required this.path,
+    required this.extent,
+    required this.imageIndex,
+  });
 
   final String path;
   final double extent;
+  final int imageIndex;
 
   @override
   State<_GalleryImage> createState() => _GalleryImageState();
@@ -100,7 +106,11 @@ class _GalleryImageState extends State<_GalleryImage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FullScreenImageViewer.show(context, widget.path),
+      onTap: () => PackageGalleryViewer.show(
+        context,
+        imagePaths: _galleryImages,
+        initialPage: widget.imageIndex,
+      ),
       child: MouseRegion(
         cursor: SystemMouseCursors.zoomIn,
         onEnter: (_) => setState(() => _hovered = true),
